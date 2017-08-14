@@ -3,11 +3,13 @@ package main
 import (
 	"database/sql"
 	json "encoding/json"
+	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	io "io/ioutil"
 	"jsonrpc"
 	"jsonrpc/server/service/user"
 	"log"
+	"time"
 )
 
 var db *sql.DB
@@ -62,12 +64,26 @@ func init() {
 	dbname := v.Master.Dbname
 	charset := v.Master.Charset
 
-	db, err = sql.Open(drive, user+":"+password+"@tcp("+ip+":"+port+")/"+dbname+"?charset="+charset)
+	db, err = sql.Open(drive, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", user, password, ip, port, dbname, charset))
 	if err != nil {
 		log.Fatalf("Error on initializing database connection: %s", err.Error())
 	}
+	if err := db.Ping(); err != nil {
+		fmt.Println("%s error ping database: %s", err.Error())
+		return
+	}
 	db.SetMaxIdleConns(100)
+	tickDbPing()
 	return
+}
+
+func tickDbPing() {
+	ticker := time.NewTicker(time.Second * 8)
+	go func() {
+		for range ticker.C {
+			db.Ping()
+		}
+	}()
 }
 
 func main() {
