@@ -1,0 +1,20 @@
+{
+    "Master":{
+        "Driver": "mysql",
+        "Host": "127.0.0.1",
+        "Port": "3306",
+        "Dbname":"test",
+        "User":"root",
+        "Password":"",
+        "Charset":"utf8mb4"
+    },
+    "Slave":{
+        "Driver": "mysql",
+        "Host": "127.0.0.1",
+        "Port": "3306",
+        "Dbname":"test",
+        "User":"root",
+        "Password":"",
+        "Charset":"utf8mb4"
+    }
+}
