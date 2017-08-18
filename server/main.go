@@ -180,8 +180,8 @@ func checkError(err error) {
 
 func main() {
 	runtime.GOMAXPROCS(runtime.NumCPU());
-	user.Register(db)
 	user.InjectSA(serviceAddress)
+	user.Register(db)
 	fmt.Println("rpc server running.")
 	jsonrpc.ListenAndServe("tcp", serviceAddress)
 }

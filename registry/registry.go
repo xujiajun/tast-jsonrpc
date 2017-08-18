@@ -21,13 +21,17 @@ var client *redis.Client
 
 func Register(ip string, weight int) {
 	client.HSet("ips", ip, weight)
+	client.HSet("ips_all", ip, weight)
+	client.HSet("s_status", ip, 1)
 }
 
-func RegisterService(ip string,serviceName string) {
+func RegisterService(ip string, serviceName string) {
 	client.HSet("services", ip, serviceName)
 }
+
 func UnRegister(ip string) {
 	client.HDel("ips", ip)
+	client.HSet("s_status", ip, -1)
 }
 
 func Inject(redisClient *redis.Client) {
@@ -53,7 +57,7 @@ func GetIp() string {
 }
 
 func HealthCheck() {
-	ticker := time.NewTicker(time.Second * 2)
+	ticker := time.NewTicker(time.Second * 1)
 	hash, err := client.HGetAll("ips").Result()
 	if err != nil {
 		panic(err)
@@ -68,7 +72,6 @@ func HealthCheck() {
 					UnRegister(ip)
 				}
 			}
-
 		}
 	}()
 }
