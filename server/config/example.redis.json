@@ -1,0 +1,28 @@
+{
+  "Master": {
+    "Tag": "Master",
+    "Host": "127.0.0.1",
+    "Port": "6379",
+    "Password": "",
+    "DB": 0,
+    "PoolSize": 40
+  },
+  "Slave": [
+    {
+      "Tag": "Slave1",
+      "Host": "127.0.0.1",
+      "Port": "6379",
+      "Password": "",
+      "DB": 0,
+      "PoolSize": 40
+    },
+    {
+      "Tag": "Slave2",
+      "Host": "127.0.0.1",
+      "Port": "6379",
+      "Password": "",
+      "DB": 0,
+      "PoolSize": 40
+    }
+  ]
+}

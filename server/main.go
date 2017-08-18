@@ -1,18 +1,29 @@
 package main
 
 import (
-	"database/sql"
-	json "encoding/json"
+	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/tsenart/nap"
 	io "io/ioutil"
 	"jsonrpc"
 	"jsonrpc/server/service/user"
+	"github.com/go-redis/redis"
 	"log"
 	"time"
+	"runtime"
+	//"strings"
+	//"net"
+	"jsonrpc/registry"
+	"os"
+	//"strconv"
+	"strconv"
 )
 
-var db *sql.DB
+var db *nap.DB
+var client *redis.Client
+var serviceAddress string
+var weight int
 
 type JsonStruct struct {
 }
@@ -29,11 +40,26 @@ type DbOption struct {
 	User     string
 	Password string
 	Charset  string
+	Tag      string
 }
 
 type DbOptions struct {
 	Master DbOption
-	Slave  DbOption
+	Slave  []DbOption
+}
+
+type RedisOptions struct {
+	Tag      string
+	Host     string
+	Port     string
+	Password string
+	DB       int
+	PoolSize int
+}
+
+type RedisDbOptions struct {
+	Master RedisOptions
+	Slave  []RedisOptions
 }
 
 func (self *JsonStruct) Load(filename string, v interface{}) {
@@ -50,21 +76,47 @@ func (self *JsonStruct) Load(filename string, v interface{}) {
 }
 
 func init() {
-	v := DbOptions{}
+	if len(os.Args) == 1 || len(os.Args) > 3 {
+		fmt.Println("Usage: ", os.Args[0], "server:port [weight]")
+		log.Fatal(os.Args)
+	}
+
+	serviceAddress = os.Args[1]
+	weight = 1
 	var err error
 
+	if len(os.Args) == 3 {
+		weight, err = strconv.Atoi(os.Args[2])
+		checkError(err)
+	}
+
+	kvs := DbOptions{}
+
 	JsonParse := NewJsonStruct()
-	JsonParse.Load("config/db.json", &v)
+	JsonParse.Load("config/db.json", &kvs)
 
-	drive := v.Master.Driver
-	ip := v.Master.Host
-	port := v.Master.Port
-	user := v.Master.User
-	password := v.Master.Password
-	dbname := v.Master.Dbname
-	charset := v.Master.Charset
+	ip := kvs.Master.Host
+	port := kvs.Master.Port
+	user := kvs.Master.User
+	password := kvs.Master.Password
+	dbname := kvs.Master.Dbname
+	charset := kvs.Master.Charset
 
-	db, err = sql.Open(drive, fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s", user, password, ip, port, dbname, charset))
+	dsns := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s;", user, password, ip, port, dbname, charset)
+
+	for _, v := range kvs.Slave {
+		ip = v.Host
+		port = v.Port
+		user = v.User
+		password = v.Password
+		dbname = v.Dbname
+		charset = v.Charset
+		dsns += fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s;", user, password, ip, port, dbname, charset)
+	}
+	dsns = string([]rune(dsns)[:len(dsns) - 1])
+
+	db, err = nap.Open("mysql", dsns)
+
 	if err != nil {
 		log.Fatalf("Error on initializing database connection: %s", err.Error())
 	}
@@ -72,9 +124,48 @@ func init() {
 		fmt.Println("%s error ping database: %s", err.Error())
 		return
 	}
+
 	db.SetMaxIdleConns(100)
 	tickDbPing()
+
+	//redis
+	client = createClient()
+
+	//addrs, err := net.InterfaceAddrs()
+	//localIp := strings.Split(addrs[5].String(), "/")[0]
+	//client.HSet("ips", "127.0.0.1:1234", 1)
+	registry.Inject(client)
+
+	//registry.Register("127.0.0.1:1234", 1)
+	registry.Register(serviceAddress, weight)
 	return
+}
+
+func createClient() *redis.Client {
+	kvs := RedisDbOptions{}
+	var err error
+
+	JsonParse := NewJsonStruct()
+	JsonParse.Load("config/redis.json", &kvs)
+
+	host := kvs.Master.Host
+	port := kvs.Master.Port
+	password := kvs.Master.Password
+	poolSize := kvs.Master.PoolSize
+	dbName := kvs.Master.DB
+
+	client = redis.NewClient(&redis.Options{
+		Addr:     host + ":" + port,
+		Password: password,
+		DB:       dbName,
+		PoolSize: poolSize,
+	})
+
+	_, err = client.Ping().Result()
+	//fmt.Println(pong, err)
+	checkError(err)
+
+	return client
 }
 
 func tickDbPing() {
@@ -86,7 +177,16 @@ func tickDbPing() {
 	}()
 }
 
+func checkError(err error) {
+	if err != nil {
+		panic(err)
+	}
+}
+
 func main() {
+	runtime.GOMAXPROCS(runtime.NumCPU());
 	user.Register(db)
-	jsonrpc.ListenAndServe("tcp", ":1234")
+	user.InjectSA(serviceAddress)
+	fmt.Println("rpc server running.")
+	jsonrpc.ListenAndServe("tcp", serviceAddress)
 }

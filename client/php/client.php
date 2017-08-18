@@ -9,7 +9,7 @@ $client = new JsonRPC("127.0.0.1", 1234);
 // for ($i=0; $i < 10000; $i++) { 
 //     $r = $client->Call("MyMath.Add",array('num1'=>1,'num2'=>2));
 // }
-for ($i=0; $i < 10000; $i++) { 
+for ($i=0; $i < 10000; $i++) {
     $r = $client->Call("User.GetUser","");
 }
 $runtime->stop();

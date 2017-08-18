@@ -1,2 +1,4 @@
 .idea/
 server/config/db.json
+server/config/redis.json
+main

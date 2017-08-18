@@ -1,20 +1,34 @@
 {
-    "Master":{
+    "Master": {
+        "Tag": "Master",
         "Driver": "mysql",
         "Host": "127.0.0.1",
         "Port": "3306",
-        "Dbname":"test",
-        "User":"root",
-        "Password":"",
-        "Charset":"utf8mb4"
+        "Dbname": "test",
+        "User": "root",
+        "Password": "123",
+        "Charset": "utf8mb4"
     },
-    "Slave":{
-        "Driver": "mysql",
-        "Host": "127.0.0.1",
-        "Port": "3306",
-        "Dbname":"test",
-        "User":"root",
-        "Password":"",
-        "Charset":"utf8mb4"
-    }
+    "Slave": [
+        {
+            "Tag": "Slave1",
+            "Driver": "mysql",
+            "Host": "127.0.0.1",
+            "Port": "3306",
+            "Dbname": "test",
+            "User": "root",
+            "Password": "123",
+            "Charset": "utf8mb4"
+        },
+        {
+            "Tag": "Slave2",
+            "Driver": "mysql",
+            "Host": "127.0.0.1",
+            "Port": "3306",
+            "Dbname": "test",
+            "User": "root",
+            "Password": "123",
+            "Charset": "utf8mb4"
+        }
+    ]
 }
