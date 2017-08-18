@@ -128,15 +128,10 @@ func init() {
 	db.SetMaxIdleConns(100)
 	tickDbPing()
 
-	//redis
 	client = createClient()
 
-	//addrs, err := net.InterfaceAddrs()
-	//localIp := strings.Split(addrs[5].String(), "/")[0]
-	//client.HSet("ips", "127.0.0.1:1234", 1)
 	registry.Inject(client)
 
-	//registry.Register("127.0.0.1:1234", 1)
 	registry.Register(serviceAddress, weight)
 	return
 }

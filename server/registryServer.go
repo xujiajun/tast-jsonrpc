@@ -12,17 +12,42 @@ var client *redis.Client
 type Registry struct {
 }
 
+type RedisOptions struct {
+	Tag      string
+	Host     string
+	Port     string
+	Password string
+	DB       int
+	PoolSize int
+}
+
+type RedisDbOptions struct {
+	Master RedisOptions
+	Slave  []RedisOptions
+}
+
 func (registry *Registry) GetIp(_, reply *string) error {
 	*reply = registryService.GetIp()
 	return nil
 }
 
 func init() {
+	kvs := RedisDbOptions{}
+
+	JsonParse := NewJsonStruct()
+	JsonParse.Load("config/redis.json", &kvs)
+
+	host := kvs.Master.Host
+	port := kvs.Master.Port
+	password := kvs.Master.Password
+	poolSize := kvs.Master.PoolSize
+	dbName := kvs.Master.DB
+
 	client = redis.NewClient(&redis.Options{
-		Addr:     "localhost:6379",
-		Password: "",
-		DB:       0,
-		PoolSize: 40,
+		Addr:     host + ":" + port,
+		Password: password,
+		DB:       dbName,
+		PoolSize: poolSize,
 	})
 
 	_, err := client.Ping().Result()
