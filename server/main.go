@@ -1,11 +1,9 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/tsenart/nap"
-	io "io/ioutil"
 	"jsonrpc"
 	"jsonrpc/server/service/user"
 	"github.com/go-redis/redis"
@@ -18,19 +16,13 @@ import (
 	"os"
 	//"strconv"
 	"strconv"
+	"jsonrpc/common"
 )
 
 var db *nap.DB
 var client *redis.Client
 var serviceAddress string
 var weight int
-
-type JsonStruct struct {
-}
-
-func NewJsonStruct() *JsonStruct {
-	return &JsonStruct{}
-}
 
 type DbOption struct {
 	Driver   string
@@ -62,19 +54,6 @@ type RedisDbOptions struct {
 	Slave  []RedisOptions
 }
 
-func (self *JsonStruct) Load(filename string, v interface{}) {
-	data, err := io.ReadFile(filename)
-	if err != nil {
-		return
-	}
-	datajson := []byte(data)
-
-	err = json.Unmarshal(datajson, v)
-	if err != nil {
-		return
-	}
-}
-
 func init() {
 	if len(os.Args) == 1 || len(os.Args) > 3 {
 		fmt.Println("Usage: ", os.Args[0], "server:port [weight]")
@@ -92,7 +71,7 @@ func init() {
 
 	kvs := DbOptions{}
 
-	JsonParse := NewJsonStruct()
+	JsonParse := common.NewJsonStruct()
 	JsonParse.Load("config/db.json", &kvs)
 
 	ip := kvs.Master.Host
@@ -140,7 +119,7 @@ func createClient() *redis.Client {
 	kvs := RedisDbOptions{}
 	var err error
 
-	JsonParse := NewJsonStruct()
+	JsonParse := common.NewJsonStruct()
 	JsonParse.Load("config/redis.json", &kvs)
 
 	host := kvs.Master.Host

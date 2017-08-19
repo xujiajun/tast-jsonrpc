@@ -3,10 +3,9 @@ package main
 import (
 	"jsonrpc"
 	registryService "jsonrpc/registry"
+	"jsonrpc/common"
 	"fmt"
 	"github.com/go-redis/redis"
-	io "io/ioutil"
-	"encoding/json"
 )
 
 var client *redis.Client
@@ -33,31 +32,11 @@ func (registry *Registry) GetIp(_, reply *string) error {
 	return nil
 }
 
-type JsonStruct struct {
-}
-
-func NewJsonStruct2() *JsonStruct {
-	return &JsonStruct{}
-}
-
-func (self *JsonStruct) Load2(filename string, v interface{}) {
-	data, err := io.ReadFile(filename)
-	if err != nil {
-		return
-	}
-	datajson := []byte(data)
-
-	err = json.Unmarshal(datajson, v)
-	if err != nil {
-		return
-	}
-}
-
 func init() {
 	kvs := RedisDbOptions{}
 
-	JsonParse := NewJsonStruct2()
-	JsonParse.Load2("config/redis.json", &kvs)
+	JsonParse := common.NewJsonStruct()
+	JsonParse.Load("config/redis.json", &kvs)
 
 	host := kvs.Master.Host
 	port := kvs.Master.Port
