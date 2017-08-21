@@ -2,21 +2,21 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-redis/redis"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/tsenart/nap"
 	"jsonrpc"
 	"jsonrpc/server/service/user"
-	"github.com/go-redis/redis"
 	"log"
-	"time"
 	"runtime"
+	"time"
 	//"strings"
 	//"net"
 	"jsonrpc/registry"
 	"os"
 	//"strconv"
-	"strconv"
 	"jsonrpc/common"
+	"strconv"
 )
 
 var db *nap.DB
@@ -92,7 +92,7 @@ func init() {
 		charset = v.Charset
 		dsns += fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=%s;", user, password, ip, port, dbname, charset)
 	}
-	dsns = string([]rune(dsns)[:len(dsns) - 1])
+	dsns = string([]rune(dsns)[:len(dsns)-1])
 
 	db, err = nap.Open("mysql", dsns)
 
@@ -158,7 +158,7 @@ func checkError(err error) {
 }
 
 func main() {
-	runtime.GOMAXPROCS(runtime.NumCPU());
+	runtime.GOMAXPROCS(runtime.NumCPU())
 	user.InjectSA(serviceAddress)
 	user.Register(db)
 	fmt.Println("rpc server running.")

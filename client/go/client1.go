@@ -5,8 +5,8 @@ import (
 	"jsonrpc"
 	//"log"
 	//"time"
-	"log"
 	"fmt"
+	"log"
 	"time"
 )
 
@@ -22,18 +22,18 @@ func main() {
 		log.Fatal("dialing:", err)
 	}
 
-	start := time.Now().UnixNano();
+	start := time.Now().UnixNano()
 	//for n := 0; n <= 10000; n++ {
-		err = client.Call("User.GetUser", x, &reply)
-		if err != nil {
-			log.Fatal("arith error:", err)
-		}
+	err = client.Call("User.GetUser", x, &reply)
+	if err != nil {
+		log.Fatal("arith error:", err)
+	}
 
-		fmt.Printf("User.getUser: %s\n", reply)
+	fmt.Printf("User.getUser: %s\n", reply)
 	//}
 	//time.Sleep(time.Second * 2)
-	end := time.Now().UnixNano();
+	end := time.Now().UnixNano()
 	sub := (end - start) / 1000000000
-	fmt.Printf("执行时间: %d（s）\n", sub);
+	fmt.Printf("执行时间: %d（s）\n", sub)
 	//fmt.Printf("QPS: %d \n", 10000 / sub);
 }

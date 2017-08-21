@@ -1,12 +1,12 @@
 package registry
 
 import (
+	"fmt"
 	"github.com/go-redis/redis"
 	"github.com/smallnest/weighted"
-	"strconv"
-	"fmt"
-	"time"
 	"net"
+	"strconv"
+	"time"
 )
 
 type Registry interface {

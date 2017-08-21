@@ -1,8 +1,8 @@
 package common
 
 import (
-	io "io/ioutil"
 	"encoding/json"
+	io "io/ioutil"
 )
 
 type JsonStruct struct {

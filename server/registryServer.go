@@ -1,11 +1,11 @@
 package main
 
 import (
-	"jsonrpc"
-	registryService "jsonrpc/registry"
-	"jsonrpc/common"
 	"fmt"
 	"github.com/go-redis/redis"
+	"jsonrpc"
+	"jsonrpc/common"
+	registryService "jsonrpc/registry"
 )
 
 var client *redis.Client

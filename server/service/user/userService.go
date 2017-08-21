@@ -1,14 +1,15 @@
 package user
 
 import (
-	"jsonrpc/server/service/user/dao"
-	"jsonrpc"
 	"github.com/tsenart/nap"
+	"jsonrpc"
 	"jsonrpc/registry"
+	"jsonrpc/server/service/user/dao"
 )
 
 var db *nap.DB
 var serviceAddress string
+
 const ServiceName = "User"
 
 type User struct {
