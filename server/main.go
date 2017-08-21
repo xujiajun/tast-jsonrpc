@@ -24,6 +24,7 @@ var client *redis.Client
 var serviceAddress string
 var weight int
 
+// DbOption definition
 type DbOption struct {
 	Driver   string
 	Host     string
@@ -35,11 +36,13 @@ type DbOption struct {
 	Tag      string
 }
 
+// DbOptions definition
 type DbOptions struct {
 	Master DbOption
 	Slave  []DbOption
 }
 
+// RedisOptions definition
 type RedisOptions struct {
 	Tag      string
 	Host     string
@@ -49,6 +52,7 @@ type RedisOptions struct {
 	PoolSize int
 }
 
+// RedisDbOptions definition
 type RedisDbOptions struct {
 	Master RedisOptions
 	Slave  []RedisOptions
@@ -71,8 +75,8 @@ func init() {
 
 	kvs := DbOptions{}
 
-	JsonParse := common.NewJSONStruct()
-	JsonParse.Load("config/db.json", &kvs)
+	JSONParse := common.NewJSONStruct()
+	JSONParse.Load("config/db.json", &kvs)
 
 	ip := kvs.Master.Host
 	port := kvs.Master.Port
@@ -119,8 +123,8 @@ func createClient() *redis.Client {
 	kvs := RedisDbOptions{}
 	var err error
 
-	JsonParse := common.NewJSONStruct()
-	JsonParse.Load("config/redis.json", &kvs)
+	JSONParse := common.NewJSONStruct()
+	JSONParse.Load("config/redis.json", &kvs)
 
 	host := kvs.Master.Host
 	port := kvs.Master.Port
