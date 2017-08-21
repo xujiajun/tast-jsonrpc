@@ -24,3 +24,14 @@ visit [this](https://github.com/xujiajun/tast-jsonrpc/blob/master/server/main.go
 ## Registry Server
 
 visit [this](https://github.com/xujiajun/tast-jsonrpc/blob/master/server/registryServer.go)
+
+## Admin Console
+
+Link: https://github.com/xujiajun/jsonrpc-admin
+
+### Screenshot
+
+<img src="https://raw.githubusercontent.com/xujiajun/jsonrpc-admin/master/docs/rpc-console.png">
+
+## License
+The Tast-JSONRPC is open-sourced software licensed under the [MIT Licensed](http://www.opensource.org/licenses/MIT)
