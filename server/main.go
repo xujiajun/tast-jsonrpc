@@ -71,7 +71,7 @@ func init() {
 
 	kvs := DbOptions{}
 
-	JsonParse := common.NewJsonStruct()
+	JsonParse := common.NewJSONStruct()
 	JsonParse.Load("config/db.json", &kvs)
 
 	ip := kvs.Master.Host
@@ -119,7 +119,7 @@ func createClient() *redis.Client {
 	kvs := RedisDbOptions{}
 	var err error
 
-	JsonParse := common.NewJsonStruct()
+	JsonParse := common.NewJSONStruct()
 	JsonParse.Load("config/redis.json", &kvs)
 
 	host := kvs.Master.Host

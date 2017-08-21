@@ -10,9 +10,11 @@ import (
 
 var client *redis.Client
 
+// Registry definition
 type Registry struct {
 }
 
+// RedisOptions definition
 type RedisOptions struct {
 	Tag      string
 	Host     string
@@ -22,21 +24,23 @@ type RedisOptions struct {
 	PoolSize int
 }
 
+// RedisDbOptions definition
 type RedisDbOptions struct {
 	Master RedisOptions
 	Slave  []RedisOptions
 }
 
-func (registry *Registry) GetIp(_, reply *string) error {
-	*reply = registryService.GetIp()
+// GetIP publishes the receiver's methods GetIP in the DefaultServer.
+func (registry *Registry) GetIP(_, reply *string) error {
+	*reply = registryService.GetIP()
 	return nil
 }
 
 func init() {
 	kvs := RedisDbOptions{}
 
-	JsonParse := common.NewJsonStruct()
-	JsonParse.Load("config/redis.json", &kvs)
+	JSONParse := common.NewJSONStruct()
+	JSONParse.Load("config/redis.json", &kvs)
 
 	host := kvs.Master.Host
 	port := kvs.Master.Port

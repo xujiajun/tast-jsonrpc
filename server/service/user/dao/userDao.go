@@ -5,6 +5,7 @@ import (
 	"github.com/tsenart/nap"
 )
 
+//GetUser get all user info
 func GetUser(db *nap.DB) string {
 	rows, err := db.Query("SELECT * FROM userinfo")
 	checkErr(err)

@@ -15,7 +15,7 @@ func main() {
 	var reply, x string
 
 	client, err := jsonrpc.NewClient("tcp", "127.0.0.1:1231")
-	err = client.Call("Registry.GetIp", x, &reply)
+	err = client.Call("Registry.GetIP", x, &reply)
 	fmt.Printf("Registry.GetIp: %s\n", reply)
 	client, err = jsonrpc.NewClient("tcp", reply)
 	if err != nil {

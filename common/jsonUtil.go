@@ -1,3 +1,4 @@
+// Package common implements json filename load and parse
 package common
 
 import (
@@ -5,21 +6,24 @@ import (
 	io "io/ioutil"
 )
 
-type JsonStruct struct {
+// JSONStruct definition
+type JSONStruct struct {
 }
 
-func NewJsonStruct() *JsonStruct {
-	return &JsonStruct{}
+// NewJSONStruct be created new
+func NewJSONStruct() *JSONStruct {
+	return &JSONStruct{}
 }
 
-func (self *JsonStruct) Load(filename string, v interface{}) {
+// Load JSON filename and parse
+func (*JSONStruct) Load(filename string, v interface{}) {
 	data, err := io.ReadFile(filename)
 	if err != nil {
 		return
 	}
-	datajson := []byte(data)
+	jsonBytes := []byte(data)
 
-	err = json.Unmarshal(datajson, v)
+	err = json.Unmarshal(jsonBytes, v)
 	if err != nil {
 		return
 	}
