@@ -104,7 +104,7 @@ func init() {
 		log.Fatalf("Error on initializing database connection: %s", err.Error())
 	}
 	if err := db.Ping(); err != nil {
-		fmt.Println("%s error ping database: %s", err.Error())
+		fmt.Printf("Error ping database: %s", err.Error())
 		return
 	}
 
