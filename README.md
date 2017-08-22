@@ -1,6 +1,6 @@
 # Tast-JSONRPC [![Go Report Card](https://goreportcard.com/badge/github.com/xujiajun/tast-jsonrpc)](https://goreportcard.com/report/github.com/xujiajun/tast-jsonrpc)
 
-The Go language implementation of jsonrpc. Support PHP、Golang、Java client .
+The Go language implementation of jsonrpc framework. Support PHP、Golang、Java client .
 
 
 
@@ -17,6 +17,19 @@ Tast-JSONRPC contains four roles : RPC Server, RPC Client, Registry and Admin co
 * Admin console as a role of service governance（run、stop server、modify weight etc.）
 
 <img src ="https://raw.githubusercontent.com/xujiajun/tast-jsonrpc/master/docs/rpc-architecture-en.png">
+
+
+## Features
+
+* Based on net/rpc 、net/rpc/jsonrpc
+* Cross-language client support (Golang、Java、PHP)
+* Data layer（now support mysql master-slave architecture）
+* Service dicovery (based on redis)
+* Server Healthcheck
+* Load banlancer (now support RoundRobin)
+* Scalable
+* Service governance
+* ...
 
 
 ## Server
