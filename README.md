@@ -22,7 +22,7 @@ Tast-JSONRPC contains four roles : RPC Server, RPC Client, Registry and Admin co
 ## Features
 
 * Based on net/rpc 、net/rpc/jsonrpc
-* Cross-language client support (Golang、Java、PHP)
+* Cross-language client support (Golang、Java、PHP、Python)
 * Data layer（now support mysql master-slave architecture）
 * Service dicovery (based on redis)
 * Server Healthcheck
