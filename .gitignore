@@ -2,3 +2,4 @@
 server/config/db.json
 server/config/redis.json
 main
+client/java/Client.class

@@ -22,7 +22,7 @@ func GetUser(db *nap.DB) string {
 		var uid int
 		var username string
 		var department string
-		var created string
+		var created int
 		err = rows.Scan(&uid, &username, &department, &created)
 		arrResult = make(map[string]interface{})
 		arrResult["uid"] = uid
